@@ -1,0 +1,305 @@
+<title>Bengaluru Supplier Targets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: drawing-register header, filter bar, then one sheet per company with a contact grid and a focus block */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#16212b; --muted:#5d6b78; --line:#d6dde4;
+  --accent:#b8560f; --accent-soft:#f6e6d8;
+  --pA:#1f7a4d; --pAbg:#dcf1e5; --pB:#8a6a00; --pBbg:#f6ecc8; --pC:#5d6b78; --pCbg:#e6eaee;
+  --gk:#8a6a00; --nf:#8b96a1;
+  --display:"Archivo",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --surface:#17202a; --ink:#e3e9ee; --muted:#9aa8b5; --line:#2a3642;
+  --accent:#f0a060; --accent-soft:#3a2a1c;
+  --pA:#7fd6a6; --pAbg:#173828; --pB:#e6c35a; --pBbg:#3a3214; --pC:#a9b5c0; --pCbg:#26313c;
+  --gk:#e6c35a; --nf:#6f7c88; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#17202a; --ink:#e3e9ee; --muted:#9aa8b5; --line:#2a3642;
+  --accent:#f0a060; --accent-soft:#3a2a1c;
+  --pA:#7fd6a6; --pAbg:#173828; --pB:#e6c35a; --pBbg:#3a3214; --pC:#a9b5c0; --pCbg:#26313c;
+  --gk:#e6c35a; --nf:#6f7c88; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 56px;display:grid;gap:22px}
+header{display:grid;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:16px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;text-wrap:balance}
+.lede{color:var(--muted);max-width:70ch;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.stats b{color:var(--ink);font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:10px;z-index:2;border-bottom:1px solid var(--line)}
+.group{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 11px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible,input:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#q{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);min-width:0;flex:1 1 200px;max-width:320px}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+.list{display:grid;gap:16px}
+.co{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);overflow:hidden}
+.id{padding:18px;border-right:1px solid var(--line);display:grid;align-content:start;gap:10px}
+.id h2{font-family:var(--display);font-weight:700;font-size:20px;margin:0;line-height:1.2}
+.meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.pill{justify-self:start;font-family:var(--mono);font-size:12px;font-weight:500;padding:3px 9px;border-radius:4px}
+.pA{color:var(--pA);background:var(--pAbg)} .pB{color:var(--pB);background:var(--pBbg)} .pC{color:var(--pC);background:var(--pCbg)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;padding:2px 8px;border-radius:4px;background:var(--accent-soft);color:var(--ink)}
+.need{font-size:13px;border-top:1px dashed var(--line);padding-top:10px}
+.need b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:2px}
+.body{padding:18px;display:grid;gap:14px;min-width:0}
+dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:7px 14px;margin:0;font-size:14px}
+dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+dd{margin:0;min-width:0;overflow-wrap:anywhere}
+dd a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:3px}
+.nf{color:var(--nf);font-style:italic}
+.gk{font-family:var(--mono);font-size:10.5px;color:var(--gk);border:1px solid currentColor;border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
+.num{font-variant-numeric:tabular-nums}
+.copy{font:inherit;font-size:11px;font-family:var(--mono);margin-left:8px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:3px;padding:0 6px;cursor:pointer}
+.strategy{border-left:3px solid var(--accent);padding-left:12px;display:grid;gap:6px}
+.strategy h3{margin:0;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.strategy p{margin:0;max-width:75ch}
+.strategy .pitch{color:var(--muted)}
+.src{font-size:12px;color:var(--muted)}
+.src a{color:var(--muted)}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:6px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:grid;gap:6px;max-width:80ch}
+@media (max-width:760px){
+  .co{grid-template-columns:1fr}
+  .id{border-right:0;border-bottom:1px solid var(--line)}
+  dl{grid-template-columns:1fr;gap:2px 0}
+  dd{margin-bottom:8px}
+  .count{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Marutee BD · Target register · Bengaluru · 12 Oct 2026</div>
+  <h1>Bengaluru Tier-1 / Tier-2 automotive supplier targets</h1>
+  <p class="lede">Suppliers with Bengaluru engineering or manufacturing centres, mapped to Marutee service lines: mechanical design, trim, motors, embedded and software. Contact fields come from public sources. Anything not found is left blank and marked.</p>
+  <div class="stats" id="stats"></div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--pA)"></i>A: verified centre, direct service fit</span>
+    <span><i class="dot" style="background:var(--pB)"></i>B: good fit, details to confirm</span>
+    <span><i class="dot" style="background:var(--pC)"></i>C: weak or unconfirmed fit</span>
+    <span><span class="gk" style="margin:0">GK</span> from general knowledge, not checked against a source</span>
+  </div>
+</header>
+
+<div class="bar" role="toolbar" aria-label="Filters">
+  <div class="group" id="fp"></div>
+  <div class="group" id="fs"></div>
+  <input id="q" type="search" placeholder="Search company, skill, area" aria-label="Search">
+  <span class="count" id="count"></span>
+</div>
+
+<div class="list" id="list"></div>
+
+<footer>
+  <div><b>Highest-demand area</b> and <b>focus strategy</b> are BD assessments built from each centre's stated mandate and visible Bengaluru hiring. They are not verified demand data. Validate in discovery calls before pitching.</div>
+  <div><b>LinkedIn</b> links open a LinkedIn company search for the name, so you land on the right page without relying on a guessed URL.</div>
+  <div><b>Switchboard numbers</b> are shown only where an official or directory source lists one. Bengaluru headcounts are rarely published; figures shown carry their scope and year.</div>
+  <div><b>Excluded:</b> Lear and MAHLE, whose India engineering sits in Pune.</div>
+</footer>
+</div>
+
+<script>
+const N=null;
+const D=[
+{n:"Inteva Products",t:"Tier-1",hq:"USA",p:"A",s:["Mechanical design","Motors","Embedded"],
+ need:"Mechanical design for closures, roof systems and interior trim",sec:"Motors & electronics engineering",
+ web:["intevaproducts.com","https://www.intevaproducts.com","v"],addr:[N],ph:["+1 248 655 8886 (global HQ, Troy MI — no India line published)","v"],car:[N],
+ hc:"~200 (Autocar Pro feature on the India centre)",
+ st:"The Bengaluru team works as full members of Inteva's product development teams in Europe, North America, China and Korea, using the time-zone gap to run work around the clock. India is being built up as a development base that generates its own IP, including low-cost roof products for mainstream segments.",
+ pitch:"Lead with follow-the-sun capacity for closures, roof and trim design, with motor/electronics support as the second line.",
+ src:[["Inteva press release","https://www.intevaproducts.com/news/press-release/inteva-products-celebrates-new-india-technical-center/"],["Autocar Pro feature","https://www.autocarpro.in/feature/india-technical-centre-aid-growth-usa-inteva-22299?amp=1"]]},
+{n:"Bosch Global Software Technologies",t:"Tier-1",hq:"Germany",p:"A",s:["Embedded"],
+ need:"Embedded software (ECU/AUTOSAR, telematics C++, diagnostics)",sec:"Electronics HW verification & validation (CAN/LIN, DV/PV)",
+ web:["bosch-softwaretechnologies.com","https://bosch-softwaretechnologies.com","v"],
+ addr:["123, Industrial Layout, Hosur Road, Koramangala, Bengaluru 560095 · also 360° Business Park, Electronic City Phase I, Bengaluru 560100","v"],
+ ph:["+91 80 6657 5757","v"],car:[N],
+ hc:"28,200+ associates (BGSW total, per its own job postings); Electronic City campus built for 5,000+",
+ st:"Bosch's technology arm and its largest software centre outside Germany, headquartered in Bengaluru. Work spans embedded systems, ADAS algorithms, EV powertrain control, telematics and automotive diagnostics for Bosch businesses worldwide.",
+ pitch:"Largely self-staffed, so pitch niche skills and short-notice surge capacity rather than general headcount.",
+ src:[["BGSW locations","https://bosch-softwaretechnologies.com/en/locations"],["AIM: Electronic City office","https://analyticsindiamag.com/ai-news-updates/bosch-global-software-technologies-opens-new-office-in-bengalurus-electronic-city"]]},
+{n:"Aptiv",t:"Tier-1",hq:"Ireland/USA",p:"A",s:["Embedded"],
+ need:"Embedded software for SDV, ADAS and digital cockpit",sec:"Cybersecurity and connectivity software",
+ web:["aptiv.com","https://www.aptiv.com","v"],addr:["Brigade Tech Gardens, Whitefield, Bengaluru","v"],ph:[N],
+ car:["Aptiv India careers","https://www.aptiv.com/en/jobs/working-here/global-locations/india","v"],
+ hc:"2,000+ at the Whitefield centre (Feb 2023), with growth planned over five years",
+ st:"New Bengaluru campus (USD 14M investment) set up as a centre of excellence for ADAS platforms and digital cockpit, focused on software-defined vehicles, cybersecurity and connectivity for Indian and global OEMs.",
+ pitch:"Verified this pass and moved up from B. Target SDV, ADAS and cockpit software roles.",
+ src:[["Autocar Pro","https://autocarpro.in/news-national/aptivs-new-tech-centre-in-bengaluru-to-focus-on-sdvs-and-connected-mobility-solutions-114028"]]},
+{n:"Visteon",t:"Tier-1",hq:"USA",p:"A",s:["Embedded"],
+ need:"Embedded software: Android Automotive infotainment, AUTOSAR, C++",sec:"Electronics, RF and audio lab validation",
+ web:["visteon.com","https://www.visteon.com","v"],addr:["Pritech Park SEZ, Bellandur Village, Bengaluru (full address not published)","v"],ph:[N],car:[N],
+ hc:"Capacity 200 at opening (2019); 2,000+ across India (Dec 2024)",
+ st:"One of seven India centres. Bengaluru covers cybersecurity, Android infotainment, AUTOSAR, driver monitoring and autonomous solutions, with labs for infotainment, audio and RF. New Android hiring is concentrating in the Kolkata centre.",
+ pitch:"Target experienced (4–8 yr) Android Automotive and AUTOSAR engineers.",
+ src:[["Visteon release (2019)","https://www.visteon.com/investors/investor-news/news-details/2019/Visteon-expands-India-engineering-operations-with-new-technology-center-in-Bangalore-06-13-2019/default.aspx"],["The Week / PTI (2024)","https://www.theweek.in/wire-updates/business/2024/12/20/mcm2-biz-visteon.html"]]},
+{n:"Valeo",t:"Tier-1",hq:"France",p:"A",s:["Embedded","Mechanical design"],
+ need:"Embedded software & systems engineering",sec:"Mechanical design for interior experience and lighting",
+ web:["valeo.com","https://www.valeo.com","g"],addr:["Pritech Park Annex, Bellandur, Bengaluru (full address not published)","v"],ph:[N],car:[N],
+ hc:"Not published for Bengaluru. Valeo India 6,500+; Chennai GTC 3,000+ (2023)",
+ st:"Satellite of the Chennai Global Tech Centre, opened July 2023 to reach Bengaluru's talent pool. Covers end-to-end software and system engineering, electronics and mechanical engineering across electrification, autonomous driving, interior experience and lighting.",
+ pitch:"Broadest single fit for Marutee. Coordinate with the existing Valeo project before outreach.",
+ src:[["Autocar Pro","https://autocarpro.in/news/valeo-india-inaugurates-satellite-technical-centre-in-bengaluru-115748"],["Turn of Speed","https://www.turnofspeed.in/news/valeo-opens-satellite-tech-centre-in-bengaluru-as-part-of-its-global-tech-centre-in-chennai.html"]]},
+{n:"BorgWarner",t:"Tier-1",hq:"USA",p:"A",s:["Embedded","CAE","Motors"],
+ need:"Embedded software and power-electronics hardware for xEV",sec:"CAE / mechanical simulation (Fuel Systems centre)",
+ web:["borgwarner.com","https://www.borgwarner.com","v"],addr:["Whitefield (electric propulsion centre) and Kundalahalli (Fuel Systems technical centre), Bengaluru","v"],ph:[N],car:[N],
+ hc:"Electric propulsion centre: 320 at opening, 550+ targeted in 2023. ITC: 491 India-based (GPTW). Kundalahalli: capacity 250",
+ st:"Two Bengaluru centres. Whitefield (ex-Delphi Technologies) develops inverters, DC-DC converters, on-board chargers, integrated drive modules and BMS, with functional safety and cybersecurity. Kundalahalli covers fuel systems software, fuel handling design, mechanical simulation and H2 engine management.",
+ pitch:"Two buying centres: pitch embedded/power electronics at Whitefield and CAE at Kundalahalli.",
+ src:[["BorgWarner release","https://www.borgwarner.com/newsroom/press-releases/2023/01/18/borgwarner-further-expands-in-bangalore-with-opening-of-electric-propulsion-engineering-center"],["Autocar Pro: Kundalahalli","https://autocarpro.in/news-national/borgwarner-opens-new-tech-centre-in-bengaluru-113551"],["GPTW profile","https://www.greatplacetowork.in/great/company/borgwarner-india-technical-center-private-limited"]]},
+{n:"Garrett Motion",t:"Tier-1",hq:"Switzerland",p:"A",s:["Embedded","Mechanical design","CAE"],
+ need:"Power electronics and functional safety software (electrification CoE)",sec:"Mechanical design / CAE for turbo and e-boosting",
+ web:["garrettmotion.com","https://www.garrettmotion.com","v"],addr:[N],ph:[N],car:[N],
+ hc:N,
+ st:"Bengaluru is Garrett's India R&D hub (Pune manufactures, Madurai is the IT centre). It is expanding beyond turbo into electrification, and opened an advanced research lab at IISc in 2024 for AI-driven development of zero-emission vehicle technology.",
+ pitch:"Target electrification: power electronics, functional safety, with turbo mechanical/CAE as a second line.",
+ src:[["Garrett newsroom","https://www.garrettmotion.com/news/newsroom/article/garrett-establishes-advanced-research-hub-at-iisc-for-next-gen-mobility-solutions/"]]},
+{n:"Autoliv",t:"Tier-1",hq:"Sweden",p:"A",s:["CAE","Mechanical design"],
+ need:"CAE (crash and airbag simulation) and CAD",sec:"PLM and manufacturing engineering",
+ web:["autoliv.com","https://www.autoliv.com","v"],
+ addr:["Site Nos 31, 32-P, 33-P, Hi-Tech Defence & Aerospace Park (IT Sector), Devanahalli, Bengaluru 562149","v"],ph:[N],car:[N],
+ hc:"4,500+ across India; Global Technical Service Center 300+ engineers (city not stated)",
+ st:"India corporate office, engineering centre and airbag facilities are in Bangalore. The Global Technical Service Center is Autoliv's hub for virtual engineering: CAD, CAE, automation, PLM, data science and material characterisation.",
+ pitch:"Pitch crash/airbag CAE and CAD capacity to the virtual engineering hub.",
+ src:[["Autoliv India","https://www.autoliv.com/autoliv-india"],["Autoliv release (2021)","https://autoliv-v2.prod-mid-euw3.investis.com/sites/autoliv/files/pr/202102161203-1.pdf"]]},
+{n:"HL Klemove",t:"Tier-1",hq:"South Korea",p:"B",s:["Embedded"],
+ need:"Embedded software: ADAS, AUTOSAR basic software",sec:"Vehicle-level validation and test",
+ web:["hlklemove.com","https://www.hlklemove.com","g"],addr:[N],ph:[N],car:[N],
+ hc:"250+ engineers (2024, per sponsored article)",
+ st:"India Tech Centre in Bengaluru for R&D, product development and system integration. 2024 milestones: India's first ADAS production line, basic software capability and end-to-end AI solutions, with a test fleet for Indian conditions.",
+ pitch:"Target BSW and ADAS validation engineers.",
+ src:[["Autocar Pro (sponsored)","https://www.autocarpro.in/sponsored-content/branded-content-hl-klemove-india-tech-centre-upping-the-game-in-both-innovation-and-relevance-in-addressing-diverse-automotive-needs-124259"]]},
+{n:"Harman International",t:"Tier-1",hq:"USA (Samsung)",p:"B",s:["Embedded"],
+ need:"Embedded software for infotainment and cabin experience",sec:N,
+ web:["harman.com","https://www.harman.com","g"],addr:[N],ph:[N],car:[N],
+ hc:N,
+ st:"Runs development centres in Bengaluru and Pune; a Chennai centre opened in 2023 with 200 staff for connected-car cabin experiences.",
+ pitch:"Confirm the Bengaluru centre's scope and size before outreach.",
+ src:[["SamMobile (2023)","https://www.sammobile.com/news/samsung-harman-opens-new-engineering-center-india/"]]},
+{n:"GKN Automotive",t:"Tier-1",hq:"UK",p:"B",s:["Embedded","Motors"],
+ need:"Embedded software for eDrive",sec:N,
+ web:["gknautomotive.com","https://www.gknautomotive.com","g"],addr:[N],ph:[N],car:[N],hc:N,
+ st:"E-mobility software centre set up in 2020 with Tata Technologies, intended to become a dedicated GKN facility once fully operational. Tata Technologies is the likely incumbent partner.",
+ pitch:"Confirm current status and parent ownership before outreach.",
+ src:[["Just Auto (2020)","https://www.just-auto.com/news/gkn-creates-new-software-centre-in-india/"]]},
+{n:"Toyota Boshoku",t:"Tier-1",hq:"Japan",p:"B",s:["Mechanical design","Manufacturing"],
+ need:"Mechanical design for seats and door trim",sec:"Manufacturing engineering for new plant ramp-up",
+ web:["toyota-boshoku.com","https://www.toyota-boshoku.com","g"],addr:[N],ph:[N],car:[N],
+ hc:"800 across India (2013 figure)",
+ st:"India subsidiary since 1998 making seats, door trim and air cleaners. A Bangalore office is referenced. A new plant at Auric Bidkin, Maharashtra broke ground in March 2026.",
+ pitch:"Time outreach to the Maharashtra plant ramp-up: trim design plus manufacturing engineering.",
+ src:[["Automotive World","https://www.automotiveworld.com/?p=201867"],["Shimizu: groundbreaking","https://www.shimz-global.com/in/en/news-release/detail/index.html?id=362"]]},
+{n:"Lumax Auto Technologies",t:"Tier-1",hq:"India",p:"B",s:["Embedded"],
+ need:"Embedded electronics (HW + SW) for ADAS and in-cabin",sec:"HIL testing and product validation",
+ web:["lumaxworld.in","https://www.lumaxworld.in","v"],addr:[N],ph:[N],car:[N],hc:N,
+ st:"SHIFT technology centre opened in Bengaluru in October 2025, covering in-cabin experience, ADAS, connectivity and embedded electronics, with labs for hardware-in-the-loop testing, rapid prototyping and validation.",
+ pitch:"New centre in early hiring. A good window for staffing support.",
+ src:[["Machinist (Oct 2025)","https://machinist.in/2025/10/lumax-auto-technologies-opens-shift-technology-centre-in-bengaluru/"]]},
+{n:"Sansera Engineering",t:"Tier-1/Tier-2",hq:"India",p:"B",s:["Manufacturing","Mechanical design","Motors"],
+ need:"Manufacturing engineering: forging, machining, automation",sec:"Mechanical design for EV drivetrain and motor components",
+ web:["sansera.in","https://sansera.in","v"],
+ addr:["Plant 7, No. 143/A, Jigani Link Road, Bommasandra Industrial Area, Bengaluru 560105","v"],
+ ph:["+91 80 2783 9081 / 82 / 83","v"],car:["careers.sansera.in","https://careers.sansera.in/sansera/","v"],hc:N,
+ st:"Bengaluru-headquartered precision forging and machining supplier with plants in Bengaluru and Bidadi. Diversifying into xEV and technology-agnostic components, including motor rotor shafts and BEV drivetrain parts, backed by in-house design, machine building and automation.",
+ pitch:"Pitch manufacturing engineering and EV component design support.",
+ src:[["Sansera contact","https://sansera.in/contact-us"],["Sansera about","https://sansera.in/about-us"]]},
+{n:"Continental / Aumovio",t:"Tier-1",hq:"Germany",p:"C",s:["Embedded"],
+ need:"Embedded software and electronics",sec:N,
+ web:["aumovio.com","https://www.aumovio.com","g"],addr:[N],ph:[N],car:[N],
+ hc:"~6,000 across India; ~1,000 GCC job cuts announced Feb 2026",
+ st:"Aumovio is cutting about 1,000 roles at its Indian GCC as part of 4,000 global cuts, refocusing R&D on market-leading technologies and lowering R&D spend to under 10% of sales by 2027.",
+ pitch:"Moved down from B: hiring is contracting. Possible later angle for flexible capacity in place of fixed headcount.",
+ src:[["Outlook Business (Feb 2026)","https://www.outlookbusiness.com/corporate/aumovios-indian-gcc-to-cut-1000-jobs-as-part-of-global-layoffs"]]},
+{n:"ZF",t:"Tier-1",hq:"Germany",p:"C",s:["Embedded"],
+ need:"Software / digital: data, AI, fleet connectivity",sec:N,
+ web:["zf.com/india","https://www.zf.com/india/en/company/company.html","v"],
+ addr:["CVS Digital Solutions, Kadubisanahalli, Bellandur Khane Village, 1901 Yemalur Road, Bengaluru 560103","v"],
+ ph:["+91 44 4224 2000 (as listed; Chennai code)","v"],car:[N],hc:N,
+ st:"Bengaluru hosts ZF's Digital Hub and the CV Control Systems Digital Solutions Centre (fleet management and connectivity). Electronics, embedded software and mechanical engineering sit at the Hyderabad Technology Centre.",
+ pitch:"Weak Bengaluru fit for core services. Route mechanical/embedded pitches to Hyderabad.",
+ src:[["ZF in India","https://www.zf.com/india/en/company/company.html"],["Machine Maker","https://themachinemaker.com/news/zf-group-launches-new-digital-hub-in-bengaluru-to-accelerate-innovation-in-mobility-technologies/"]]},
+{n:"Toyota Kirloskar Auto Parts",t:"Tier-1",hq:"Japan/India JV",p:"C",s:["Manufacturing"],
+ need:"Manufacturing engineering",sec:"Mechanical design",
+ web:[N],addr:["Bidadi, near Bengaluru (full address not found)","v"],ph:[N],car:[N],hc:N,
+ st:"Component plants at Bidadi beside Toyota Kirloskar Motor. Product scope (drivetrain) is from general knowledge and engineering activity in India is unconfirmed.",
+ pitch:"Confirm engineering activity before outreach.",
+ src:[["Automotive World","https://www.automotiveworld.com/?p=142093"]]},
+{n:"Nidec",t:"Tier-1/Tier-2",hq:"Japan",p:"C",s:["Motors","Manufacturing"],
+ need:"Motor design / electromechanical engineering",sec:"Manufacturing engineering",
+ web:["nidec.com","https://www.nidec.com","g"],addr:[N],ph:["+91 80 6726 4800 (industry directory)","v"],car:[N],
+ hc:"1,000–5,000 across India (directory range)",
+ st:"Nidec Industrial Automation India makes alternators, drives and motors in Bengaluru and Hubli, with a large new campus at Hubli-Dharwad that includes EV motors. Its software work is partnered with Tata Elxsi.",
+ pitch:"Motor fit is real but the Bengaluru entity is industrial. Confirm an automotive buying centre.",
+ src:[["Industrial Automation India directory","https://industrialautomationindia.in/directory/nidec-industrial-automation-india-private-ltd"],["Machinist: Hubli","https://machinist.in/?p=4887"]]}
+];
+
+const SERV=["Embedded","Mechanical design","Motors","CAE","Manufacturing"];
+let fp="All",fs="All",q="";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NF='<span class="nf">Not found in public sources</span>';
+const gk=f=>f==="g"?'<span class="gk" title="General knowledge, not checked against a source">GK</span>':"";
+function link(f){if(!f||!f[0])return NF;return `<a href="${esc(f[1])}" target="_blank" rel="noopener">${esc(f[0])}</a>${gk(f[2])}`}
+function txt(f){return f&&f[0]?esc(f[0])+gk(f[1]):NF}
+function phone(f){if(!f||!f[0])return NF;return `<span class="num">${esc(f[0])}</span><button class="copy" data-c="${esc(f[0].split(" (")[0])}" type="button">Copy</button>`}
+function li(n){return `<a href="https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(n)}" target="_blank" rel="noopener">Search “${esc(n)}”</a>`}
+
+function chips(el,vals,cur,set){
+  el.innerHTML=vals.map(v=>`<button class="chip" type="button" aria-pressed="${v===cur}" data-v="${esc(v)}">${esc(v==="All"?"All":v)}</button>`).join("");
+  el.onclick=e=>{const b=e.target.closest("button");if(!b)return;set(b.dataset.v);render()};
+}
+function render(){
+  chips(document.getElementById("fp"),["All","A","B","C"],fp,v=>fp=v);
+  chips(document.getElementById("fs"),["All",...SERV],fs,v=>fs=v);
+  const rows=D.filter(d=>(fp==="All"||d.p===fp)&&(fs==="All"||d.s.includes(fs))&&
+    (!q||JSON.stringify([d.n,d.need,d.sec,d.st,d.s]).toLowerCase().includes(q)));
+  document.getElementById("count").textContent=`${rows.length} of ${D.length} shown`;
+  const L=document.getElementById("list");
+  if(!rows.length){L.innerHTML='<div class="empty">No companies match these filters. Clear the search or pick “All”.</div>';return}
+  L.innerHTML=rows.map(d=>`
+  <article class="co">
+    <div class="id">
+      <span class="pill p${d.p}">Priority ${d.p}</span>
+      <h2>${esc(d.n)}</h2>
+      <div class="meta">${esc(d.t)} · HQ ${esc(d.hq)}</div>
+      <div class="tags">${d.s.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+      <div class="need"><b>Highest-demand area</b>${esc(d.need)}</div>
+      ${d.sec?`<div class="need"><b>Secondary</b>${esc(d.sec)}</div>`:""}
+    </div>
+    <div class="body">
+      <dl>
+        <dt>Website</dt><dd>${link(d.web)}</dd>
+        <dt>Bengaluru address</dt><dd>${txt(d.addr)}</dd>
+        <dt>Main switchboard</dt><dd>${phone(d.ph)}</dd>
+        <dt>Careers page</dt><dd>${link(d.car)}</dd>
+        <dt>LinkedIn</dt><dd>${li(d.n)}</dd>
+        <dt>Bengaluru headcount</dt><dd class="num">${d.hc?esc(d.hc):NF}</dd>
+      </dl>
+      <div class="strategy">
+        <h3>Focus strategy</h3>
+        <p>${esc(d.st)}</p>
+        <p class="pitch"><b>How to target:</b> ${esc(d.pitch)}</p>
+      </div>
+      <div class="src">Sources: ${d.src.map(s=>`<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join(" · ")}</div>
+    </div>
+  </article>`).join("");
+}
+document.getElementById("stats").innerHTML=
+  `<span><b>${D.length}</b> companies</span>`+["A","B","C"].map(p=>`<span>Priority ${p}: <b>${D.filter(d=>d.p===p).length}</b></span>`).join("")+
+  SERV.map(s=>`<span>${s}: <b>${D.filter(d=>d.s.includes(s)).length}</b></span>`).join("");
+document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();render()});
+document.getElementById("list").addEventListener("click",e=>{
+  const b=e.target.closest(".copy");if(!b)return;
+  const done=()=>{b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1500)};
+  try{navigator.clipboard.writeText(b.dataset.c).then(done,()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)})}catch(_){}
+});
+render();
+</script>
